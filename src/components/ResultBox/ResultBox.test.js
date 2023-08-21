@@ -56,5 +56,20 @@ describe('Component ResultBox', () => {
             expect(convertedOutput).toHaveTextContent(testObj.expectedOutput);
             cleanup()
         }
-    });   
+    });
+
+    it('should render "Wrong value...", when input value < 0', () => {
+
+        const testCasesNegativeNum = [
+            { amount: '-100', from: 'PLN', to: 'USD'},
+            { amount: '-20.25', from: 'USD', to: 'PLN'},
+        ];
+
+        for(const testObj of testCasesNegativeNum) {
+            render(<ResultBox from={testObj.from} to={testObj.to} amount={parseFloat(testObj.amount)} />);
+            const convertedOutput = screen.getByTestId('converted-output');
+            expect(convertedOutput).toHaveTextContent('Wrong value...');
+            cleanup()
+        }
+    })
 });
