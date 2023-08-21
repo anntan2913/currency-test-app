@@ -16,8 +16,7 @@ describe('Component ResultBox', () => {
             { amount: '345', expectedOutput: 'PLN 345.00 = $98.57' },
         ];
 
-        for(const testObj of testCasesPLNToUSD) { 
-
+        for(const testObj of testCasesPLNToUSD) {
             render(<ResultBox from='PLN' to='USD' amount={parseFloat(testObj.amount)} />);
             const convertedOutput = screen.getByTestId('converted-output');
             expect(convertedOutput).toHaveTextContent(testObj.expectedOutput);
@@ -34,12 +33,28 @@ describe('Component ResultBox', () => {
             { amount: '345', expectedOutput: '$345.00 = PLN 1,207.50' },
         ];
 
-        for(const testObj of testCasesUSDToPLN) { 
-
+        for(const testObj of testCasesUSDToPLN) {
             render(<ResultBox from='USD' to='PLN' amount={parseFloat(testObj.amount)} />);
             const convertedOutput = screen.getByTestId('converted-output');
             expect(convertedOutput).toHaveTextContent(testObj.expectedOutput);
             cleanup()
         }
-    })    
+    });
+
+    it('should render proper info when the same value for "from" and "to" is set', () => {
+        
+        const testCasesOneCurrency = [
+            { amount: '100', from: 'PLN', to: 'PLN', expectedOutput: 'PLN 100.00 = PLN 100.00'},
+            { amount: '20.25', from: 'USD', to: 'USD', expectedOutput: '$20.25 = $20.25'},
+            { amount: '200.50', from: 'PLN', to: 'PLN', expectedOutput: 'PLN 200.50 = PLN 200.50'},
+            { amount: '345', from: 'USD', to: 'USD', expectedOutput: '$345.00 = $345.00'},
+        ];
+
+        for(const testObj of testCasesOneCurrency) {
+            render(<ResultBox from={testObj.from} to={testObj.to} amount={parseFloat(testObj.amount)} />);
+            const convertedOutput = screen.getByTestId('converted-output');
+            expect(convertedOutput).toHaveTextContent(testObj.expectedOutput);
+            cleanup()
+        }
+    });   
 });
